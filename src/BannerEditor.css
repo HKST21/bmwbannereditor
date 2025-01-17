@@ -1,0 +1,149 @@
+.banner-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 350px auto auto;
+    gap: 20px;
+    width: 100%;
+    min-height: 600px;
+
+
+}
+
+
+.heading-section { 
+    width: fit-content;
+    justify-self: center;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    width: 600px;
+    flex-direction: column;
+    gap: 0;
+    
+    
+    
+    
+}
+
+.title-area {
+    display: flex;          /* Horizontální uspořádání loga a nadpisu */
+    align-items: center;    /* Vertikální centrování */
+    gap: 10px;             /* Mezera mezi logem a nadpisem */
+    width: 100%;           /* Využije celou šířku h2-container */
+    margin-bottom: 0;
+}
+
+.heading-section img {
+  padding: 4px;
+}
+
+.heading-section h2 {
+    flex: 1;
+    white-space: normal;
+    word-wrap: break-word;
+    width: 600px;
+    margin: 0;
+}
+
+.drag-area {
+    position: relative;    /* Vytvoří kontext pro absolutní pozicování obrázku */
+    grid-row: 2;          /* Druhý řádek gridu */
+    height: 100%;
+    width: 600px;         /* Vyplní celou výšku řádku */
+    border: 1px dashed #110d67;  /* Vizuální indikace oblasti pro přetahování */
+}
+
+h2:hover {
+    background-color:aliceblue;
+    cursor: pointer;    
+
+}
+
+.drag-area:hover {
+    background-color: aliceblue;
+}
+
+.pic-container {
+    position: absolute;       /* Toto je v JSX, ale souvisí s tím */
+    width: 600px;            /* Pevná šířka pro obrázek - můžete upravit */
+    cursor: move;            /* Ukazatel ruky při přetahování */
+}
+
+.pic-container img {
+    width: 100%;             /* Vyplní kontejner */
+    height: auto;            /* Zachová poměr stran */
+    display: block;          /* Odstraní případné mezery */
+}
+
+@media (max-width: 768px) {
+    .banner-container {
+        max-width: 90%;
+        gap: 8px
+
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+}
+
+@media (max-width: 48Opx) {
+    .banner-container {
+        max-width: 95%;
+        gap: 5px
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+}
+    
+
+
+.button-container {
+
+    grid-row: 4;         
+    justify-self: center;
+    display: flex;
+    gap: 7px;
+    height: fit-content;
+    width: fit-content;
+    justify-content: center;
+}
+
+.input-area {
+    display: flex;
+    gap: 4px;
+    margin-top: 0;
+}
+
+.bottom-text {
+    grid-row: 3;
+    width: 600px;
+    display: flex;
+    justify-self: center;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.bottom-text:hover {
+    background-color:aliceblue;
+    cursor: pointer;    
+
+}
+.bottom-text-editor {
+    display: flex;
+    gap: 4px;
+    margin-top: 0;
+
+}
+.bottom-text-editor input {
+    width: 300px;
+    
+}
+
