@@ -1,19 +1,22 @@
-import { ChangeEvent, ReactEventHandler, useState } from "react"
+import { useState } from "react"
 import './BannerEditor.css'
-import carImage from './assets/x3.png';
-import bmwlogo from './assets/bmwlogo-removebg-preview.png'
+
+import bmwlogo from '/assets/bmwlogo-removebg-preview.png';
+import x1 from '/assets/x1.png'
+import x3 from '/assets/x3.png'
+import x4 from '/assets/x4.png'
 
 
-interface BannerState {
-    h2text: string,
-    h2size: number,
-    showinput: boolean,
-    bottomText: string
-}
+
 
 type Option = {
-    value: string,
+    colourName: string,
     label: string
+}
+
+type CarOptions = {
+    carModel: string,
+    carPicSource: string
 }
 
 export function BannerEditor() {
@@ -29,15 +32,25 @@ export function BannerEditor() {
         y: -25
     })
     const [colourOption, setColourOption] = useState<Option>({
-        value: 'black', label: '#000000'
+        colourName: 'black', label: '#000000'
     })
 
     const colourOptions: Option[] = [
-        { value: 'bmw blue', label: '#0166B1' },
-        { value: 'bmw white', label: '#FFFFFF' },
-        { value: 'bmw grey', label: '#6F6F6F' },
-        { value: 'black', label: '#000000' }
+        { colourName: 'bmw blue', label: '#0166B1' },
+        { colourName: 'bmw white', label: '#FFFFFF' },
+        { colourName: 'bmw grey', label: '#6F6F6F' },
+        { colourName: 'black', label: '#000000' }
     ]
+
+    const [showCars, setShowCars] = useState<boolean>(false);
+
+    const [carOptions, setCarOption] = useState<CarOptions[]>([
+        { carModel: 'X4', carPicSource: x4},
+        { carModel: 'X1', carPicSource: x1 },
+        { carModel: 'X3', carPicSource: x3 }
+    ])
+
+    const [selectedCar, setSelectedCar] = useState<CarOptions>(carOptions[2]);
 
 
     const handleH2Text = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +114,7 @@ export function BannerEditor() {
 
         const pickedColour = e.target.value;
 
-        const foundColour = colourOptions.find((option) => pickedColour === option.value);
+        const foundColour = colourOptions.find((option) => pickedColour === option.colourName);
 
         if (foundColour) {
             setColourOption(foundColour);
@@ -139,6 +152,26 @@ export function BannerEditor() {
 
     }
 
+    const handleShowCars = () => {
+
+        setShowCars(true)
+
+    }
+
+    const handleChangeCar = (carModel: string) => {
+
+        const choosedCar = carOptions.find((car) => carModel === car.carModel)
+
+        if (choosedCar) {
+            setSelectedCar(choosedCar)
+        }
+
+        
+        
+    }
+
+    
+
 
 
     return (
@@ -164,11 +197,11 @@ export function BannerEditor() {
                                 placeholder="size in px">
                             </input>
                             <select
-                                value={colourOption.value}
+                                value={colourOption.colourName}
                                 onChange={handleSelectColour}>
                                 {colourOptions.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.value}
+                                    <option key={option.colourName} value={option.colourName}>
+                                        {option.colourName}
                                     </option>
                                 ))}
                             </select>
@@ -190,12 +223,13 @@ export function BannerEditor() {
 
                         }}
                         className="pic-container">
-                        <img
-                            src={carImage}></img>
+                       
+                        <img style={{transform: 'scale(0.6)'}} src={selectedCar.carPicSource}/>
                     </div>
+
                 </div>
                 <div>
-                    <div  className="bottom-text">
+                    <div className="bottom-text">
                         <p
                             onClick={handleShowEditBottomText}
                         >
@@ -213,6 +247,23 @@ export function BannerEditor() {
                             <button onClick={() => setShowEditBottomText(false)}>hide</button>
                         </div>
                     )}
+                </div>
+                <div className="car-select-container">
+                <button onClick={handleShowCars}>change car</button>
+                {showCars && (carOptions.map((car) => (
+                    <div className="radio-buttons"key={car.carModel}>
+                        <label>
+                            <input
+                                type="radio"
+                                name="carSelect"
+                                checked={car.carModel === selectedCar.carModel} // Tady říkáme: "Buď zaškrtnutý (true) pokud selectedCar.carModel se rovná car.carModel" 
+                                value={car.carModel}
+                                onClick={() => handleChangeCar(car.carModel)}
+                            />
+                            {car.carModel}
+                        </label>
+                    </div>
+                )))}
                 </div>
 
                 <div className="button-container">
