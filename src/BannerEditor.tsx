@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import './BannerEditor.css'
 
 import bmwlogo from '/assets/bmwlogo-removebg-preview.png';
@@ -51,6 +51,10 @@ export function BannerEditor() {
     ])
 
     const [selectedCar, setSelectedCar] = useState<CarOptions>(carOptions[2]);
+
+    const [uploadedCarPhoto, setUploadedCarPhoto] = useState<File>();
+
+    const [isDragging, setIsDragging] = useState<boolean>(false)
 
 
     const handleH2Text = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,6 +174,57 @@ export function BannerEditor() {
         
     }
 
+    const handleDragoverCar = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+    }
+
+    const handleDropcar= (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+
+        const uploadedData = e.dataTransfer.files;
+
+        console.log("vypiš dataTransfer.files", uploadedData)
+
+        const file = uploadedData[0];
+
+        console.log("vypiš dataTransfer.files a jeho index[0] kde má být soubour", file);
+        
+
+        if (file.type === "image/png" || file.type === "image/jpg" && file.size < 1000000) {
+ 
+            const picToUrl = URL.createObjectURL(file) //  je to metoda na vytvoření stringu z třeba obrázku a vytvoří to URL které začíná blob: a je to cesta k obrázku
+
+            setUploadedCarPhoto(file);
+
+
+            setCarOption([...carOptions, {carModel: 'own', carPicSource: picToUrl}])
+            setIsDragging(false)
+        }
+
+    }
+
+    const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+
+        setIsDragging(true)
+
+    }
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false)
+    }
+
+    useEffect(() => { // unmounting componenty uvolním paměť, kterou zabíral obrázek
+        return () => {
+            carOptions.forEach((car) => {
+                if (car.carPicSource.startsWith('blob')) {
+                    URL.revokeObjectURL(car.carPicSource)
+                }
+            })
+        }
+    },[])
+
     
 
 
@@ -270,6 +325,14 @@ export function BannerEditor() {
                     <button onClick={() => handleExtLink(1)}>Discover BMW</button>
                     <button onClick={() => handleExtLink(2)}>Test drive</button>
                 </div>
+
+                <div
+                onDragOver={handleDragoverCar}
+                onDrop={handleDropcar}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}>
+                    
+                DROP BMW CAR IMAGE HERE</div>
 
             </div>
         </div>
